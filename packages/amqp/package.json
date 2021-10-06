@@ -1,0 +1,37 @@
+{
+  "name": "@effect-ts/amqp",
+  "version": "0.1.0",
+  "license": "MIT",
+  "repository": "https://github.com/Effect-TS/amqp.git",
+  "homepage": "https://www.matechs.com",
+  "private": false,
+  "scripts": {
+    "clean": "rimraf build tsbuildinfo",
+    "build:lib": "ttsc --build  tsconfig.build.json && build-utils package",
+    "build:es6": "ttsc --build  tsconfig.es6.json && babel build/esm/ -d build/esm/ -s --plugins annotate-pure-calls && build-utils package-esm",
+    "build:post-amqp": "build-utils rewrite-source-maps && build-utils rewrite-locals && yarn prettier:lib",
+    "build": "yarn run build:lib && yarn run build:es6 && yarn run build:post-amqp",
+    "lint": "eslint . --ext .ts,.tsx",
+    "autofix": "yarn prettier && yarn lint --fix && yarn prettier",
+    "prettier": "prettier --write \"./{src,test,demo}/**/*.ts\"",
+    "prettier:lib": "prettier --write \"./build/**/*.js\"",
+    "tc": "tsc --noEmit",
+    "demo": "ts-node -r tsconfig-paths/register"
+  },
+  "publishConfig": {
+    "access": "public",
+    "directory": "build"
+  },
+  "sideEffects": false,
+  "config": {
+    "modules": [
+      "Client",
+      "ExchangeType"
+    ]
+  },
+  "peerDependencies": {
+    "@effect-ts/core": "^0.44.10",
+    "amqplib": "^0.8.0"
+  },
+  "dependencies": {}
+}

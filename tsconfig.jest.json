@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "files": [],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ES2018",
+    "plugins": [
+      {
+        "transform": "@effect-ts/tracing-plugin",
+        "moduleMap": {
+          "^packages/amqp/src/(.*)": "(@effect-ts/amqp): src/$1",
+          "^packages/amqp/test/(.*)": "(@effect-ts/amqp/test): test/$1"
+        }
+      }
+    ]
+  }
+}
