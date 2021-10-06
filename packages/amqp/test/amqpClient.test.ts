@@ -9,6 +9,7 @@ import * as TE from "@effect-ts/jest/Test"
 import type { StartedTestContainer } from "testcontainers"
 import { GenericContainer } from "testcontainers"
 
+import * as Channel from "../src/Channel"
 import * as Client from "../src/Client"
 import * as ExchangeType from "../src/ExchangeType"
 import * as TestUtils from "./test-utils"
@@ -51,22 +52,22 @@ describe("AMQP Client", () => {
           M.use((channel) =>
             pipe(
               T.tuple(
-                Client.queueDeclare_(channel, queueName),
-                Client.exchangeDeclare_(channel, exchangeName, ExchangeType.fanout),
-                Client.queueBind_(channel, queueName, exchangeName, "myroutingkey"),
-                Client.publish_(channel, exchangeName, Buffer.from(message1)),
-                Client.publish_(channel, exchangeName, Buffer.from(message2))
+                Channel.queueDeclare_(channel, queueName),
+                Channel.exchangeDeclare_(channel, exchangeName, ExchangeType.fanout),
+                Channel.queueBind_(channel, queueName, exchangeName, "myroutingkey"),
+                Channel.publish_(channel, exchangeName, Buffer.from(message1)),
+                Channel.publish_(channel, exchangeName, Buffer.from(message2))
               ),
               T.zipRight(
                 pipe(
-                  Client.consume_(channel, queueName, "test"),
+                  Channel.consume_(channel, queueName, "test"),
                   S.take(2),
                   S.runCollect,
                   T.tap((records) =>
                     pipe(
                       T.fromOption(A.last(records)),
                       T.map((record) => record.fields.deliveryTag),
-                      T.chain((tag) => Client.ack_(channel, tag))
+                      T.chain((tag) => Channel.ack_(channel, tag))
                     )
                   ),
                   T.map(A.map((_) => _.content.toString("utf-8")))
@@ -74,8 +75,8 @@ describe("AMQP Client", () => {
               ),
               T.tap(() =>
                 pipe(
-                  Client.queueDelete_(channel, queueName),
-                  T.zipRight(Client.exchangeDelete_(channel, exchangeName))
+                  Channel.queueDelete_(channel, queueName),
+                  T.zipRight(Channel.exchangeDelete_(channel, exchangeName))
                 )
               )
             )
@@ -108,25 +109,25 @@ describe("AMQP Client", () => {
           M.use((channel) =>
             pipe(
               T.tuple(
-                Client.queueDeclare_(channel, queueName),
-                Client.exchangeDeclare_(channel, exchangeName, ExchangeType.fanout),
-                Client.queueBind_(channel, queueName, exchangeName, "myroutingkey"),
+                Channel.queueDeclare_(channel, queueName),
+                Channel.exchangeDeclare_(channel, exchangeName, ExchangeType.fanout),
+                Channel.queueBind_(channel, queueName, exchangeName, "myroutingkey"),
                 T.collectAllPar(
                   A.map_(messages, (message) =>
-                    Client.publish_(channel, exchangeName, Buffer.from(message))
+                    Channel.publish_(channel, exchangeName, Buffer.from(message))
                   )
                 )
               ),
               T.zipRight(
                 pipe(
-                  Client.consume_(channel, queueName, "test"),
+                  Channel.consume_(channel, queueName, "test"),
                   S.take(numMessages),
                   S.runCollect,
                   T.tap((records) =>
                     pipe(
                       T.fromOption(A.last(records)),
                       T.map((record) => record.fields.deliveryTag),
-                      T.chain((tag) => Client.ack_(channel, tag))
+                      T.chain((tag) => Channel.ack_(channel, tag))
                     )
                   ),
                   T.map(A.map((_) => _.content.toString("utf-8")))
@@ -134,8 +135,8 @@ describe("AMQP Client", () => {
               ),
               T.tap(() =>
                 pipe(
-                  Client.queueDelete_(channel, queueName),
-                  T.zipRight(Client.exchangeDelete_(channel, exchangeName))
+                  Channel.queueDelete_(channel, queueName),
+                  T.zipRight(Channel.exchangeDelete_(channel, exchangeName))
                 )
               )
             )
