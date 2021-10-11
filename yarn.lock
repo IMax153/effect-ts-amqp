@@ -410,9 +410,9 @@
   integrity sha512-JoNdsn8J1XrGlCxURMN9mNoYvMvvMqERDsivqwBn1saaqiB6AqP1Azg5FdlcIX6YzOeZHtgZuoEFnqD2dm8Jlg==
 
 "@effect-ts/tracing-plugin@^0.14.10":
-  version "0.14.10"
-  resolved "https://registry.yarnpkg.com/@effect-ts/tracing-plugin/-/tracing-plugin-0.14.10.tgz#e0b654d7f31c7a9c524880739dca4f768edeac52"
-  integrity sha512-tYxKnHrPXJTv/bgJIfxdRMVWJFzAe275jQGOKiB5essMFrQ2P9NNNpmRjszCiwftuvtbVSjhMm5zvQ3MVgciwA==
+  version "0.14.14"
+  resolved "https://registry.yarnpkg.com/@effect-ts/tracing-plugin/-/tracing-plugin-0.14.14.tgz#2e91fcdef6705ea1448dc5940163ff4ce1b5fc04"
+  integrity sha512-5j+Wm2GCx1odTyH1sCbgbXbKSoM4eMWeTYdRKoZTrNKwjvMM2MLYh4baPzRgMEL76tNPj3FLDvE9AljCQZATjw==
 
 "@endemolshinegroup/cosmiconfig-typescript-loader@^3.0.2":
   version "3.0.2"
